@@ -45,6 +45,31 @@ public class Main {
     private static final int DISMISSAL_KIND = 19;
     private static final int FIELDER = 20;
 
+    //find the number of players who took most number of catches in 2016 by venue
+    private static void playerWithMostNumberOfCatchesByVenue(List<Delivery>deliveries,List<Match> matches) throws IOException {
+            HashMap<String, String> teamToWhichPlayerBelong = new HashMap<>();
+            HashMap<String, Integer> playerWithMostNumberOfCatches = new HashMap<>();
+            for (Match match : matches) {
+                if (match.getSeason().equals("2016")) {
+                    for (Delivery delivery : deliveries) {
+                        if(delivery.getMatch_id().equals(match.getId()) && delivery.getDismissal_kind() != null) {
+                            if (delivery.getDismissal_kind().equals("caught")) {
+                                String player = delivery.getFielder();
+                                String bowling_team = delivery.getBowling_team();
+                                teamToWhichPlayerBelong.put(player, bowling_team);
+                                playerWithMostNumberOfCatches.put(player, playerWithMostNumberOfCatches.getOrDefault(player, 0) + 1);
+                            }
+                        }
+                    }
+                }
+            }
+            List<Map.Entry<String,Integer>> entryList = new ArrayList<>(playerWithMostNumberOfCatches.entrySet());
+            entryList.sort((a,b) -> b.getValue().compareTo(a.getValue()));
+            for(Map.Entry<String,Integer> values: entryList) {
+                System.out.println("Player Name: " + values.getKey() + " Catches: " + values.getValue() + " Team: " + teamToWhichPlayerBelong.get(values.getKey()));
+            }
+    }
+
     private static void topEconomicalBowlers(List<Delivery> deliveries, List<Match> matches) {
         HashMap<String, Integer> totalRunsByBowlers = new HashMap<>();
         HashMap<String, Integer> totalDeliveriesByBowlers = new HashMap<>();
@@ -78,7 +103,7 @@ public class Main {
     }
 
     private static void extraRunsConcededPerTeam(List<Delivery> deliveries, List<Match> matches) {
-        Map<String, Integer> extraRunsPerTeam = new HashMap<>();
+        HashMap<String, Integer> extraRunsPerTeam = new HashMap<>();
         for (Match match : matches) {
             if(match.getSeason().equals("2016")) {
                 for (Delivery delivery : deliveries) {
@@ -195,10 +220,11 @@ public class Main {
     public static void main(String[] args) throws IOException
     {
         List<Match> matches = getMatchesData();
+        List<Delivery> deliveries = getDeliveriesData();
         findNumberOfMatchesPlayedPerYear(matches);
         numberOfMatchesWonByAllTeams(matches);
-        List<Delivery> deliveries = getDeliveriesData();
         extraRunsConcededPerTeam(deliveries, matches);
         topEconomicalBowlers(deliveries, matches);
+        playerWithMostNumberOfCatchesByVenue(deliveries, matches);
     }
 }
