@@ -45,8 +45,8 @@ public class Main {
     private static final int DISMISSAL_KIND = 19;
     private static final int FIELDER = 20;
 
-    //find the number of players who took most number of catches in 2016 by venue
-    private static void playerWithMostNumberOfCatchesByVenue(List<Delivery>deliveries,List<Match> matches) throws IOException {
+    //find the number of players who took most number of catches in 2016 by team
+    private static void playerWithMostNumberOfCatchesByTeam(List<Delivery> deliveries, List<Match> matches){
             HashMap<String, String> teamToWhichPlayerBelong = new HashMap<>();
             HashMap<String, Integer> playerWithMostNumberOfCatches = new HashMap<>();
             for (Match match : matches) {
@@ -65,8 +65,10 @@ public class Main {
             }
             List<Map.Entry<String,Integer>> entryList = new ArrayList<>(playerWithMostNumberOfCatches.entrySet());
             entryList.sort((a,b) -> b.getValue().compareTo(a.getValue()));
-            for(Map.Entry<String,Integer> values: entryList) {
-                System.out.println("Player Name: " + values.getKey() + " Catches: " + values.getValue() + " Team: " + teamToWhichPlayerBelong.get(values.getKey()));
+            for(Map.Entry<String,Integer> value: entryList) {
+                String player = value.getKey();
+                //System.out.println(player);
+                System.out.println("Name of the player: " + value.getKey() + ", Number of catches: " + value.getValue() + ", Team: " + teamToWhichPlayerBelong.get(player));
             }
     }
 
@@ -161,7 +163,7 @@ public class Main {
         HashMap<String, Integer> matchesWonByAllTeams = new HashMap<>();
         for(Match match : matches) {
             String winner = match.getWinner();
-            if(winner != "") {
+            if(!winner.equals("")) {
                 matchesWonByAllTeams.put(winner, matchesWonByAllTeams.getOrDefault(winner, 0) + 1);
             }
             else{
@@ -225,6 +227,6 @@ public class Main {
         numberOfMatchesWonByAllTeams(matches);
         extraRunsConcededPerTeam(deliveries, matches);
         topEconomicalBowlers(deliveries, matches);
-        playerWithMostNumberOfCatchesByVenue(deliveries, matches);
+        playerWithMostNumberOfCatchesByTeam(deliveries, matches);
     }
 }
