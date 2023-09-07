@@ -45,7 +45,6 @@ public class Main {
     private static final int DISMISSAL_KIND = 19;
     private static final int FIELDER = 20;
 
-    //find the number of players who took most number of catches in 2016 by team
     private static void playerWithMostNumberOfCatchesByTeam(List<Delivery> deliveries, List<Match> matches){
             HashMap<String, String> teamToWhichPlayerBelong = new HashMap<>();
             HashMap<String, Integer> playerWithMostNumberOfCatches = new HashMap<>();
@@ -66,9 +65,7 @@ public class Main {
             List<Map.Entry<String,Integer>> entryList = new ArrayList<>(playerWithMostNumberOfCatches.entrySet());
             entryList.sort((a,b) -> b.getValue().compareTo(a.getValue()));
             for(Map.Entry<String,Integer> value: entryList) {
-                String player = value.getKey();
-                //System.out.println(player);
-                System.out.println("Name of the player: " + value.getKey() + ", Number of catches: " + value.getValue() + ", Team: " + teamToWhichPlayerBelong.get(player));
+                System.out.println("Name of the player: " + value.getKey() + ", Number of catches: " + value.getValue() + ", Team: " + teamToWhichPlayerBelong.get(value.getKey()));
             }
     }
 
@@ -119,7 +116,7 @@ public class Main {
         System.out.println(extraRunsPerTeam);
     }
 
-    private static List<Delivery> getDeliveriesData() throws IOException {
+    public static List<Delivery> getDeliveriesData() throws IOException {
         List<Delivery> deliveries = new ArrayList<>();
         String line;
         BufferedReader br = new BufferedReader(new FileReader("deliveries.csv"));
